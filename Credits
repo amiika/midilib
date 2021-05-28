@@ -82,3 +82,7 @@ Adam Murray (adamjmurray on Github)
 @rhelsing on Github
 
     Added the ability to save MIDI format 0 files.
+
+Miika Alonen
+
+    Updated midilib for Ruby 3.0 by fixing uses of Proc.
