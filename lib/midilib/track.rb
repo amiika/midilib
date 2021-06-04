@@ -1,9 +1,5 @@
 require_relative 'event'
 require_relative 'mergesort'
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/main
 
 module MIDI
   # A Track is a list of events.
@@ -100,16 +96,16 @@ module MIDI
     # end.
     def recalc_times(starting_at=0, list=@events)
       t = (starting_at == 0) ? 0 : list[starting_at - 1].time_from_start
-      previous_on = nil
+      previous_events = {}
       list[starting_at .. -1].each do |e|
         t += e.delta_time
         e.time_from_start = t
         if e.is_a?(MIDI::NoteOff) and e.on
           e.on.sustain = ((t - e.on.time_from_start)*1.0)/@sequence.ppqn
-        elsif e.is_a?(MIDI::NoteOn)
-          previous_on.sleep = ((t - previous_on.time_from_start)*1.0)/@sequence.ppqn if previous_on
-          previous_on = e
         end
+        previous_event = previous_events[e.class]
+        previous_event.sleep = ((t - previous_event.time_from_start)*1.0)/@sequence.ppqn if previous_event
+        previous_events[e.class] = e
       end
     end
 
