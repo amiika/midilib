@@ -103,7 +103,7 @@ module MIDI
   # The abstract superclass of all note on, and note off, and polyphonic
   # pressure events.
   class NoteEvent < ChannelEvent
-    attr_accessor :note, :velocity
+    attr_accessor :note, :velocity, :sustain, :sleep
     def initialize(status, channel, note, velocity, delta_time)
       super(status, channel, delta_time)
       @note = note

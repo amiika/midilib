@@ -1,5 +1,5 @@
 require_relative 'event'
-require_relative  'mergesort'
+require_relative 'mergesort'
 
 
 module MIDI
@@ -98,9 +98,16 @@ module MIDI
     # end.
     def recalc_times(starting_at=0, list=@events)
       t = (starting_at == 0) ? 0 : list[starting_at - 1].time_from_start
+      previous_on = nil
       list[starting_at .. -1].each do |e|
         t += e.delta_time
         e.time_from_start = t
+        if e.is_a?(MIDI::NoteOff) and e.on
+          e.on.sustain = ((t - e.on.time_from_start)*1.0)/@sequence.ppqn
+        elsif e.is_a?(MIDI::NoteOn)
+          previous_on.sleep = ((t - previous_on.time_from_start)*1.0)/@sequence.ppqn if previous_on
+          previous_on = e
+        end
       end
     end
 
