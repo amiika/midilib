@@ -7,9 +7,10 @@ module MIDI
     # Modifying delta_time does not affect time_from_start. You need to call
     # the event's track's +recalc_time+ method.
     attr_accessor :delta_time
-    # The start time of this event from the beginning of the track. This value
-    # is held here but is maintained by the track.
-    attr_accessor :time_from_start
+    # The start time of this event from the beginning of the track. The wait is the time
+    # between events. Values are held here but is maintained by the track.
+    attr_accessor :time_from_start, :wait
+
     # The MIDI status byte. Never includes the channel, which is held
     # separately by MIDI::ChannelEvent.
     attr_reader :status
@@ -524,6 +525,10 @@ module MIDI
 
     def tempo
       @data
+    end
+
+    def bpm
+      (MICROSECS_PER_MINUTE.to_f / tempo.to_f).round
     end
 
     def tempo=(val)

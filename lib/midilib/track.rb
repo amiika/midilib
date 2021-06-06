@@ -101,10 +101,10 @@ module MIDI
         t += e.delta_time
         e.time_from_start = t
         if e.is_a?(MIDI::NoteOff) and e.on
-          e.on.sustain = ((t - e.on.time_from_start)*1.0)/@sequence.ppqn
+          e.on.sustain = ((t - e.on.time_from_start).to_f)/@sequence.ppqn
         end
         previous_event = previous_events[e.class]
-        previous_event.sleep = ((t - previous_event.time_from_start)*1.0)/@sequence.ppqn if previous_event
+        e.wait = previous_event ? ((t - previous_event.time_from_start).to_f)/@sequence.ppqn : e.time_from_start.to_f/@sequence.ppqn
         previous_events[e.class] = e
       end
     end
